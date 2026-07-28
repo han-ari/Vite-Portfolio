@@ -8,19 +8,19 @@ export async function fetchRepos(username){
   return response.json();
 }
 
-export function repoCard(repo){
-  const description = repo.description ? repo.description : 'No description provided.';
-  const language = repo.language ? `<span class="item-meta">${repo.language}</span>` : '';
+export function repoCard({ name, html_url, description, language, stargazers_count }){
+  const desc = description ? description : 'No description provided.';
+  const languageBadge = language ? `<span class="item-meta">${language}</span>` : '';
 
   return `
-    <a href="${repo.html_url}" class="item-row repo-row" target="_blank" rel="noopener noreferrer">
+    <a href="${html_url}" class="item-row repo-row" target="_blank" rel="noopener noreferrer">
       <div class="repo-row-main">
-        <span class="item-title">${repo.name}</span>
-        <span class="repo-desc">${description}</span>
+        <span class="item-title">${name}</span>
+        <span class="repo-desc">${desc}</span>
       </div>
       <div class="repo-row-meta">
-        ${language}
-        <span class="item-meta repo-stars">★ ${repo.stargazers_count}</span>
+        ${languageBadge}
+        <span class="item-meta repo-stars">★ ${stargazers_count}</span>
       </div>
     </a>
   `;
