@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ari Han</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="alternate icon" href="/favicon.ico"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="frame" id="frame">
+  <canvas id="wave-canvas"></canvas>
+
+  <div class="hero-block" id="hero-block">
+    <a href="#home" class="hero-name-link" aria-label="Go to home">
+      <h1 class="hero-name">Ari Han</h1>
+    </a>
+    <p class="hero-role">Developer / Designer / Data Science, AI &amp; ML</p>
+
+    <nav class="section-nav" aria-label="Section navigation">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Technical Summary</a>
+      <a href="#repositories">Repositories</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <hr class="hero-divider"/>
+
+    <div class="social-links" aria-label="Social links">
+      <a href="mailto:ari.han.inbox@gmail.com">ari.han.inbox@gmail.com ↗</a>
+      <a href="https://github.com/han-ari" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://linkedin.com/in/ari-han" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="https://x.com/hanaridev" target="_blank" rel="noopener">X / Twitter ↗</a>
+    </div>
+  </div>
+
+  <main class="page-viewport" id="page-viewport">
+    <section id="about" class="page">
+      <h2>Web Development. Design. Data Science. AI. ML. &amp; More.</h2>
+      <p>Hi, I'm Ari! I'm an aspiring developer passionate about creating clean, accessible, and responsive experiences, from front-end interfaces to the data and systems behind them. I enjoy working across multiple languages and I've been expanding into data science, aritificial intelligence, and machine learning as I explore how design and intelligence intersect.</p>
+      <p>I've bulit projects randing from simple static sites to interactive layouts, along with work in data analysis, AI and ML. I'm especially interested in responsive design and making sure what I build is usable, readable, and useful, whether that's a webpage or a model.</p>
+      <p>My goal is to keep growing as a full-stack developer alongside a growing focus on data science, building a portfolio that shows off both my technical range and my eye for design. Outside of coding, I love playing League of Legends and exploring creative outlets like design and dance.</p>
+    </section>
+
+    <section id="projects" class="page">
+      <div class="section-head-row">
+        <h2>Selected Work</h2>
+        <div class="filter-tabs" role="tablist" aria-label="Filter projects by category">
+          <button type="button" class="filter-tab is-active" data-filter="all">All</button>
+          <button type="button" class="filter-tab" data-filter="web">Web</button>
+          <button type="button" class="filter-tab" data-filter="mobile">Mobile</button>
+          <button type="button" class="filter-tab" data-filter="design">Design</button>
+          <button type="button" class="filter-tab" data-filter="experiments">Experiments</button>
+        </div>
+      </div>
+      <div class="project-list">
+        <a href="#" class="project-row" data-category="web">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><circle cx="120" cy="24" r="40" fill="#ff966b" opacity="0.7"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project One</span>
+            <span class="item-meta">2026 / Design &amp; Dev</span>
+          </div>
+        </a>
+        <a href="#" class="project-row" data-category="mobile">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><rect x="30" y="10" width="60" height="80" rx="10" fill="#d0f7fb" opacity="0.75"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project Two</span>
+            <span class="item-meta">2025 / Design &amp; Dev</span>
+          </div>
+        </a>
+        <a href="#" class="project-row" data-category="experiments">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><path d="M0 70 Q40 20 80 60 T160 40 V100 H0 Z" fill="#83a6ff" opacity="0.75"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project Three</span>
+            <span class="item-meta">2025 / Dev</span>
+          </div>
+        </a>
+        <a href="#" class="project-row" data-category="design">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><circle cx="55" cy="50" r="34" fill="#d0f7fb" opacity="0.8"/><circle cx="105" cy="50" r="20" fill="#83a6ff" opacity="0.7"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project Four</span>
+            <span class="item-meta">2026 / Design</span>
+          </div>
+        </a>
+        <a href="#" class="project-row" data-category="web">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><rect x="0" y="60" width="160" height="40" fill="#ff966b" opacity="0.65"/><rect x="0" y="0" width="160" height="20" fill="#d0f7fb" opacity="0.7"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project Five</span>
+            <span class="item-meta">2026 / Design &amp; Dev</span>
+          </div>
+        </a>
+        <a href="#" class="project-row" data-category="experiments">
+          <div class="project-thumb">
+            <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><circle cx="30" cy="30" r="14" fill="#83a6ff" opacity="0.8"/><circle cx="80" cy="60" r="20" fill="#ff966b" opacity="0.7"/><circle cx="135" cy="25" r="10" fill="#83a6ff" opacity="0.6"/></svg>
+          </div>
+          <div class="project-info">
+            <span class="item-title">Project Six</span>
+            <span class="item-meta">2026 / Dev</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="skills" class="page">
+      <h2>Technical Summary</h2>
+      <div class="tech-summary">
+        <div class="tech-row">
+          <span class="tech-label">Operating Systems</span>
+          <span class="tech-items">Windows, MacOS, Linux</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Development</span>
+          <span class="tech-items">HTML, CSS, JavaScript, React, Angular, Python, SQL, Ruby on Rails, REST APIs, JSON, FastAPI, Pydantic, Swagger UI, TailwindCSS, NPM, Vite, Firebase, Supabase</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Data &amp; Analytics</span>
+          <span class="tech-items">Pandas, Jupyter Notebook, Google Colab, Microsoft PowerBI, Scikit-Learn</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">AI &amp; GenAI Tools</span>
+          <span class="tech-items">Cluade, ChatGPT, Copilot, Gemini, Midjourney, Stable Diffusion</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Design Tools</span>
+          <span class="tech-items">Figma, Adobe Creative Cloud (Illustrator, Photoshop), Canva, Affinity, Gimp, Miro</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Platforms &amp; CMS</span>
+          <span class="tech-items">WordPress, Shopify, Salesforce, Zendesk, Guru</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Productivity Tools, Version Control &amp; Testing</span>
+          <span class="tech-items">Basecamp, Notion, Discord, TextExpander, MaestroQA, Slack, Zoom, Calendly, GitHub, Git, Teamup</span>
+        </div>
+        <div class="tech-row">
+          <span class="tech-label">Business Tools</span>
+          <span class="tech-items">Microsoft Office (Word, Excel, PowerPoint, Outlook and Teams), Google Workspace (Docs, Sheets, Slides, Gmail and Meet), DocuSign, QuickBooks</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="repositories" class="page">
+      <h2>Open Source &amp; Code</h2>
+      <p class="repo-status" id="repo-status">Loading repositories…</p>
+      <div class="item-list" id="repo-list"></div>
+      <a href="https://github.com/han-ari" class="view-all-link" target="_blank" rel="noopener noreferrer">View all on GitHub ↗</a>
+    </section>
+
+    <section id="contact" class="page">
+      <h2>Let's Talk</h2>
+      <p>Feel free to reach out if you want to build something together, have a question, or just want to connect.</p>
+
+      <form class="contact-form" id="contact-form" action="mailto:you@example.com" method="post" enctype="text/plain">
+        <div class="field">
+          <label for="cf-name">Name</label>
+          <input type="text" id="cf-name" name="name" placeholder="Jane Doe" required/>
+        </div>
+
+        <div class="field">
+          <label for="cf-email">Email address</label>
+          <input type="email" id="cf-email" name="email" placeholder="jane@example.com" required/>
+        </div>
+
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" rows="5" maxlength="2000" placeholder="How can I help?" required></textarea>
+          <span class="char-count"><span id="cf-count">0</span>/2000</span>
+        </div>
+
+        <button type="submit" class="send-btn">
+          <span>Send Message</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <p class="form-note" id="cf-note"></p>
+      </form>
+    </section>
+  </main>
+</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
