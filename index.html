@@ -9,9 +9,16 @@
 <link rel="alternate icon" href="/Vite-Portfolio/favicon.ico"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <script type="module" crossorigin src="/Vite-Portfolio/assets/index-BYX1dvWw.js"></script>
-  <link rel="stylesheet" crossorigin href="/Vite-Portfolio/assets/index-BhW5l71C.css">
+<!-- Loaded as a non-blocking preload instead of a plain <link rel="stylesheet"> - a synchronous font
+     stylesheet request was flagged by Lighthouse as blocking initial paint. This preloads the CSS in
+     parallel with everything else, then swaps it to an active stylesheet once it arrives; the
+     <noscript> fallback covers browsers with JS disabled. Text still renders immediately in a fallback
+     font either way, since the Google Fonts URL already includes &display=swap. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/></noscript>
+<!-- No <link rel="stylesheet"> here — src/style.css is imported from src/main.js instead. Vite treats CSS as a module too. -->
+  <script type="module" crossorigin src="/Vite-Portfolio/assets/index-CvscBBTt.js"></script>
+  <link rel="stylesheet" crossorigin href="/Vite-Portfolio/assets/index-BhYqdUpa.css">
 </head>
 <body>
 
