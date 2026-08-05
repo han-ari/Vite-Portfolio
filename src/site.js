@@ -261,10 +261,20 @@ const COLOR_CORAL = 'rgb(255,150,107)';   // #ff966b
 
 /*
 px spacing between dot centers, so fine grain. This is the main cost dial for the whole animation: the dot
-count is (width/CELL) * (height/CELL), so cost scales with 1/CELL². Going 5 to 7 is roughly half the work,
-5 to 10 is a quarter of it, at the price of a coarser grain.
+count is (width/CELL) * (height/CELL), so cost scales with 1/CELL². A fixed CELL=5 meant a small mobile
+viewport and a large desktop one ended up with wildly different dot counts - a Lighthouse run showed
+~16.7s of blocked main-thread time on a large desktop viewport (tens of thousands more dots than the same
+constant produced on a phone) versus none at all on mobile. CELL is computed per-resize instead, targeting
+a fixed dot budget regardless of screen size, so a big screen gets a coarser grain rather than a
+proportionally heavier frame cost.
 */
-const CELL = 5;
+let CELL = 5;
+const TARGET_DOT_COUNT = 22000;
+
+function computeCell(width, height){
+  const idealCell = Math.sqrt((width * height) / TARGET_DOT_COUNT);
+  return Math.max(5, idealCell);     // never finer than the original 5px grain, only ever coarser
+}
 
 /*
 Wave shape lookup tables.
@@ -380,6 +390,7 @@ export function initCanvasAnimation() {
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    CELL = computeCell(width, height);
     buildDots();
   }
   window.addEventListener('resize', resize);
@@ -393,7 +404,7 @@ export function initCanvasAnimation() {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /*
+ /*
   Back to a real clock instead of scroll position - the wave rolls continuously on its own, same as the
   original version, rather than only moving when you scroll. The render math below is unchanged from the
   scroll-driven version though: lookup tables instead of live Math.sin/Math.pow calls, and one batched
@@ -462,7 +473,7 @@ export function initCanvasAnimation() {
 
       /*
       rect, not arc. These dots run from 0.15px to about 2px across, a size where a square and a circle are
-      indistinguishable but arc() has to tessellate a curve into line segments for every single one, while
+      indistinguishable — but arc() has to tessellate a curve into line segments for every single one, while
       rect() is four points.
       */
       const d = radius * 2;
@@ -477,12 +488,26 @@ export function initCanvasAnimation() {
     ctx.globalAlpha = 1;
   }
 
-  requestAnimationFrame(draw);
+  /*
+  Starting the animation only once the browser reports idle time (or the page has fully loaded, as a
+  fallback for browsers without requestIdleCallback) keeps it out of the way of everything competing
+  for the main thread during initial page load which is exactly the window Lighthouse's Total Blocking
+  Time metric measures. The animation itself is unchanged once it starts; this only delays when the 
+  first frame fires.
+  */
+  function start() {
+    requestAnimationFrame(draw);
+  }
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(start, { timeout: 2000 });
+  } else {
+    window.addEventListener('load', start);
+  }
 }
 
 /*
-Made a contact form with a character counter and mailto submit. Will swap this for a Formspree/EmailJS
-fetch call once I have an endpoint, so tthe form submits in-page instead of opening email.
+Made a contact form with a character counter and mailto submit. Will swap this for a Formspree/EmailJS fetch call
+once I have an endpoint, so tthe form submits in-page instead of opening email.
 */
 export function initContactForm() {
   const contactForm = document.getElementById('contact-form');
@@ -511,7 +536,7 @@ export function initContactForm() {
 
       const subject = encodeURIComponent(`Portfolio contact from ${name}`);
       const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-      window.location.href = `mailto:you@example.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:ari.han.inbox@gmail.com?subject=${subject}&body=${body}`;
 
       cfNote.textContent = 'Opening your email client...';
     });
