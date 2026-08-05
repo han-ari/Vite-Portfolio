@@ -1,13 +1,14 @@
 /* 
-This is the ONLY file imported directly from index.html. Wiring only. Imported the pieces from other modules and calls them on page load. 
-No rendering or fetch logic of its own beyond using the imported repoCard() to build the repo grid. 
+This is the ONLY file imported directly from index.html. Wiring only. Imported the pieces from other
+modules and calls them on page load.  No rendering or fetch logic of its own beyond using the imported
+repoCard() to build the repo grid. 
 */
 
 import './style.css';
 
 import { initProjectFilters } from './projects.js';
 import { fetchRepos, repoCard } from './api.js';
-import { initNavAlign, initPageNav, initCanvasAnimation, initContactForm } from './site.js';
+import { initNavAlign, initPageNav, initScrollSpy, initCanvasAnimation, initContactForm } from './site.js';
 
 const USERNAME = 'han-ari';
 
@@ -20,9 +21,10 @@ async function initRepos(){
 
   try{
     const repos = await fetchRepos(USERNAME);
-
-    // Build a filtered copy with spread so the original fetched array is never mutated —
-    // useful if we ever need the full unfiltered list elsewhere later.
+    /*
+    Built a filtered copy with spread so the original fetched array is never mutated. Useful if we ever
+    need the full unfiltered list elsewhere later.
+    */
     const ownRepos = [...repos].filter((repo) => !repo.fork);
 
     if(!ownRepos.length){
@@ -39,8 +41,14 @@ async function initRepos(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  /*
+  Order matters for these three: initNavAlign sets the viewport's padding-top, initPageNav then jumps
+  to any deep-linked section against that settled  layout, and initScrollSpy starts observing last so
+  its first reading is of the final scroll position instead of a stale one.
+  */
   initNavAlign();
   initPageNav();
+  initScrollSpy();
   initCanvasAnimation();
   initContactForm();
   initProjectFilters();

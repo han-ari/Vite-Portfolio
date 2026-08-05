@@ -1,4 +1,4 @@
-//GitHub Repositories that fetch live repo data. Logic unchanged. Exported so main.js can wire it up to the DOM.
+// GitHub Repositories that fetch live repo data. Logic unchanged. Exported so main.js can wire it up to the DOM.
 
 export async function fetchRepos(username){
   const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);

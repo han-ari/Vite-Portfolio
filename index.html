@@ -41,6 +41,7 @@
   </div>
 
   <main class="page-viewport" id="page-viewport">
+    <div class="home-spacer" id="home" aria-hidden="true"></div>
     <section id="about" class="page">
       <h2>Web Development. Design. Data Science. AI. ML. &amp; More.</h2>
       <p>Hi, I'm Ari! I'm an aspiring developer passionate about creating clean, accessible, and responsive experiences, from front-end interfaces to the data and systems behind them. I enjoy working across multiple languages and I've been expanding into data science, aritificial intelligence, and machine learning as I explore how design and intelligence intersect.</p>
@@ -51,17 +52,17 @@
     <section id="projects" class="page">
       <div class="section-head-row">
         <h2>Selected Work</h2>
-        <div class="filter-tabs" role="tablist" aria-label="Filter projects by category">
-          <button type="button" class="filter-tab is-active" data-filter="all">All</button>
-          <button type="button" class="filter-tab" data-filter="web">Web</button>
-          <button type="button" class="filter-tab" data-filter="mobile">Mobile</button>
-          <button type="button" class="filter-tab" data-filter="design">Design</button>
-          <button type="button" class="filter-tab" data-filter="experiments">Experiments</button>
+        <div class="filter-tabs" aria-label="Filter projects by category">
+          <button type="button" class="filter-tab is-active" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="filter-tab" data-filter="web" aria-pressed="false">Web</button>
+          <button type="button" class="filter-tab" data-filter="mobile" aria-pressed="false">Mobile</button>
+          <button type="button" class="filter-tab" data-filter="design" aria-pressed="false">Design</button>
+          <button type="button" class="filter-tab" data-filter="experiments" aria-pressed="false">Experiments</button>
         </div>
       </div>
       <div class="project-list">
         <a href="#" class="project-row" data-category="web">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><circle cx="120" cy="24" r="40" fill="#ff966b" opacity="0.7"/></svg>
           </div>
           <div class="project-info">
@@ -70,7 +71,7 @@
           </div>
         </a>
         <a href="#" class="project-row" data-category="mobile">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><rect x="30" y="10" width="60" height="80" rx="10" fill="#d0f7fb" opacity="0.75"/></svg>
           </div>
           <div class="project-info">
@@ -79,7 +80,7 @@
           </div>
         </a>
         <a href="#" class="project-row" data-category="experiments">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><path d="M0 70 Q40 20 80 60 T160 40 V100 H0 Z" fill="#83a6ff" opacity="0.75"/></svg>
           </div>
           <div class="project-info">
@@ -88,7 +89,7 @@
           </div>
         </a>
         <a href="#" class="project-row" data-category="design">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><circle cx="55" cy="50" r="34" fill="#d0f7fb" opacity="0.8"/><circle cx="105" cy="50" r="20" fill="#83a6ff" opacity="0.7"/></svg>
           </div>
           <div class="project-info">
@@ -97,7 +98,7 @@
           </div>
         </a>
         <a href="#" class="project-row" data-category="web">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><rect x="0" y="60" width="160" height="40" fill="#ff966b" opacity="0.65"/><rect x="0" y="0" width="160" height="20" fill="#d0f7fb" opacity="0.7"/></svg>
           </div>
           <div class="project-info">
@@ -106,7 +107,7 @@
           </div>
         </a>
         <a href="#" class="project-row" data-category="experiments">
-          <div class="project-thumb">
+          <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><circle cx="30" cy="30" r="14" fill="#83a6ff" opacity="0.8"/><circle cx="80" cy="60" r="20" fill="#ff966b" opacity="0.7"/><circle cx="135" cy="25" r="10" fill="#83a6ff" opacity="0.6"/></svg>
           </div>
           <div class="project-info">
@@ -157,8 +158,8 @@
 
     <section id="repositories" class="page">
       <h2>Open Source &amp; Code</h2>
-      <p class="repo-status" id="repo-status">Loading repositories…</p>
-      <div class="item-list" id="repo-list"></div>
+      <p class="repo-status" id="repo-status" aria-live="polite">Loading repositories…</p>
+      <div class="item-list" id="repo-list" aria-live="polite"></div>
       <a href="https://github.com/han-ari" class="view-all-link" target="_blank" rel="noopener noreferrer">View all on GitHub ↗</a>
     </section>
 
@@ -185,12 +186,12 @@
 
         <button type="submit" class="send-btn">
           <span>Send Message</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
             <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
 
-        <p class="form-note" id="cf-note"></p>
+        <p class="form-note" id="cf-note" aria-live="polite"></p>
       </form>
     </section>
   </main>

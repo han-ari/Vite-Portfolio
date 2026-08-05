@@ -9,8 +9,10 @@
 
   --ink:#000000;
   --ink-soft:rgba(0,0,0,0.64);
-  --ink-faint:rgba(0,0,0,0.36);
-
+  --ink-faint:rgba(0,0,0,0.58);     
+  /* Was 0.36 that computed to ~2.5:1 contrast on white, failing WCAG AA (4.5:1) for every use of this
+     variable, including form labels. 0.58 computes to ~5.3:1. 
+  */
   --surface:rgba(255,255,255,0.5);
   --surface-border:rgba(0,0,0,0.14);
 
@@ -22,8 +24,9 @@
   --font-body:'Inter','Space Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
 
   /* Hero Spacing 
-     Hero spacing values are extracted so the content column can compute exactly where the nav starts so it can align its heading to it. 
-     If any of these change, the alignment updates automatically instead of drifting out of sync. 
+     Hero spacing values are extracted so the content column can compute exactly where the nav starts so
+     it can align its heading to it. If any of these change, the alignment updates automatically instead
+     of drifting out of sync. 
   */
   --hero-pad-top:clamp(1.25rem, 4vw, 3.5rem);
   --hero-pad-left:clamp(1.25rem, 4vw, 3.5rem);
@@ -48,8 +51,8 @@ body{
 }
 
 /* Frame
-   Fixed the viewpoint so it never moves. Holds my name, title, nax, and the animated background. Section content lives in an inner
-   scrollable container so only that scrolls while the frame and the animation stay put. 
+   Fixed the viewpoint so it never moves. Holds my name, title, nax, and the animated background. Section
+   content lives in an inner scrollable container so only that scrolls while the frame and the animation stay put. 
 */
 
 .frame{
@@ -72,9 +75,10 @@ body{
 }
 
 /* Hero
-   The hero is a real column, not an overlay. It sits to the left, sized to its own content (capped at 520px on wide screens), 
-   so page content filles the rest of the row to the right starting from the same top edge. This is a genuine two-column layout rather
-   than one column padded down to visually clear the other, so there's no vertical-offset. 
+   The hero is a real column, not an overlay. It sits to the left, sized to its own content (capped at
+   520px on wide screens), so page content filles the rest of the row to the right starting from the same
+   top edge. This is a genuine two-column layout rather than one column padded down to visually clear the
+   other, so there's no vertical-offset. 
 */
 
 .hero-block{
@@ -190,8 +194,9 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
 .social-links a:hover::after{ transform:scaleX(1); }
 
 /* Page Viewpoint
-   Only one page is visible at a time, navigation clicks swap which page is visible. Scrolls 
-   internally only if a page's own content overflows. 
+   All the sections live here stacked one after another, and this is the only element on the page that scrolls
+   (html/body are overflow:hidden and .frame is fixed). Navigation clicks scroll to a section rather than
+   swapping which one is displayed. The scroll position is what drives the fade-ins and the nav underline.
 */
 
 .page-viewport{
@@ -202,9 +207,17 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   min-height:0;
   display:flex;
   flex-direction:column;
-  align-items:flex-end;
+  align-items:flex-start;     /* sections start against the hero column instead of the right edge of the frame */
   overflow-y:auto;
-  padding:12rem clamp(1.25rem, 4vw, 3.5rem) 3vh 0;     /* top - fallback before javascript measures the real nav position */
+  /* Left/right/bottom Padding 
+     Fixed gutter around content; top alignment now comes from --nav-offset set in site.js), applied per-section
+     below, so whichever section is currently in view lines its heading up with the nav the same way About does. 
+  */
+  padding:0 var(--hero-pad-left) 3vh var(--hero-pad-left);
+  /* Snapping
+     Snapping between sections is handled in site.js instead of via native scroll-snap - see the note in
+     initScrollSpy for why. 
+  */
   scrollbar-width:none;     /* Firefox */
   -ms-overflow-style:none;     /* old Edge/IE */
 }
@@ -213,25 +226,54 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   display:none;     /* Chrome, Safari, new Edge */
 }
 
+/* Home Spacer
+   A full, blank section above About - just the animated background, no content so the page opens
+   empty instead of showing About immediately. Clicking the hero name scrolls back here.
+*/
+.home-spacer{
+  flex:0 0 auto;
+  width:100%;
+  min-height:100%;
+}
+
+/* Pages
+   All the sections are stacked now instead of one being shown at a time, so scrolling moves through them.
+
+   flex:0 0 auto is load-bearing. .page-viewport is a column flex container, which makes every section a
+   flex item, and flex items default to flex-shrink:1 so a section taller than the viewport gets squashed
+   down to fit and its content spills out over the section below it. Locking shrink to 0 keeps every section
+   at its natural content height.
+
+   min-height:100% then pads out the short sections so each one fills the column. That's what guarantees
+   exactly one section is sitting over the middle of the viewport at any time, which is what the nav
+   highlight in site.js relies on to pick a single link.
+*/
 .page{
-  display:none;
+  flex:0 0 auto;
+  min-height:100%;
+  padding-top:var(--nav-offset, 12rem);     /* lines this section's heading up with the nav, same offset for every section */
   opacity:0;
+  transform:scale(0.97);
+  transition:opacity 0.5s ease, transform 0.5s ease;
 }
 
-.page.is-active{
-  display:block;
+.page.is-current{
   opacity:1;
-  animation:page-in 0.4s ease both;
+  transform:scale(1);
 }
 
-@keyframes page-in{
-  from{ opacity:0; transform:translateY(6px); }
-  to{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){
+  .page{ transition:none; }
+}
+
+/* If javascript never runs, the scroll spy never adds .is-current and the whole page would be blank. */
+@media (scripting:none){
+  .page{ opacity:1; transform:none; }
 }
 
 /* Sections
-   Content sits in a right-hand column with left-aligned text. Page content fills the rest of the fram to the right,
-   both starting from the same top edge. 
+   Content sits in the second column, left-aligned and capped at a comfortable reading width so long lines
+   don't stretch across the whole frame on a wide screen. Both columns start from the same top edge.
 */
 
 section{
@@ -256,7 +298,7 @@ section p{
   line-height:1.85;
   color:var(--ink-soft);
   margin:0 0 1rem;
-  max-width:52ch;
+  max-width:100%;
 }
 
 .tech-summary{
@@ -655,9 +697,10 @@ section p{
 }
 
 /* Mobile for phones in portrait or landscape
-   Initially I tried to do a two column format so it looks the same as the desktop version but there isn't enough room for it on a phone. 
-   Instead the frame stacks vertically, a compact header (my name, role, nav, socials) sit fixed at the top with the nav and social links as 
-   wrapping horizontal rows. Content gets filled below with the remainining width and height scrolling on its own. 
+   Initially I tried to do a two column format so it looks the same as the desktop version but there
+   isn't enough room for it on a phone. Instead the frame stacks vertically, a compact header (my name,
+   role, nav, socials) sit fixed at the top with the nav and social links as wrapping horizontal rows. 
+   Content gets filled below with the remainining width and height scrolling on its own. 
 */
 
 @media (max-width:700px), (orientation:landscape) and (max-width:1000px), (orientation:landscape) and (max-height:600px){
@@ -709,9 +752,17 @@ section p{
   }
 
   /* Content
-     Sits below the header, full width and scrolls on its own so the javascript nav-sync padding is omitted from this layout
-     (see script.js) and a plain fixed padding is used instead. 
+     Sits below the header, full width and scrolls on its own so the javascript nav-sync padding is
+     omitted from this layout (see script.js) and a plain fixed padding is used instead. 
   */
+
+  .home-spacer{
+    min-height:100%;
+  }
+
+  .page{
+    padding-top:0;
+  }
   
   .page-viewport{
     flex:1 1 auto;
@@ -752,9 +803,10 @@ section p{
 }
 
 /* Tablet (701px-1024px, portrait)
-   Tablets keep the full two-column desktop skeleton in both orientations. Landscape renders it correctly. Portrait needs 
-   a smaller scale instead of conforming to full desktop sizing (hero column up to 520px, name up to 4.6rem), which was too 
-   large relative to a ~768-834px wide screen and is what threw off alignment in my testing. 
+   Tablets keep the full two-column desktop skeleton in both orientations. Landscape renders it correctly.
+   Portrait needs  a smaller scale instead of conforming to full desktop sizing (hero column up to 520px, 
+   name up to 4.6rem), which was too large relative to a ~768-834px wide screen and is what threw off
+   alignment in my testing. 
 */
    
 @media (min-width:701px) and (max-width:1024px) and (orientation:portrait){
@@ -775,10 +827,10 @@ section p{
   }
 
   .page-viewport{
-    padding:6rem clamp(1.1rem, 2.5vw, 1.75rem) 3vh 0;
+    padding:0 var(--hero-pad-left) 3vh var(--hero-pad-left);
     min-width:0;
   }
 
   section{ max-width:100%; }
-  section p{ max-width:58ch; }
+  section p{ max-width:100%; }
 }

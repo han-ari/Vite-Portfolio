@@ -1,6 +1,6 @@
-/*
-Projects markup stays static in index.html (six hardcoded cards with hover thumbnail SVGs). This module only owns the category filter tab logic
-which is wrapped in an exported init function so main.js can call it during page load. 
+/* 
+Projects markup stays static in index.html. This module only owns the category filter tab logic 
+which is wrapped in an exported init fucntion so main.js can call it during page load.
 */
 export function initProjectFilters(){
   const filterTabs = document.querySelectorAll('.filter-tab');
@@ -14,8 +14,12 @@ export function initProjectFilters(){
 
   filterTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
-      filterTabs.forEach((t) => t.classList.remove('is-active'));
+      filterTabs.forEach((t) => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-pressed', 'false');
+      });
       tab.classList.add('is-active');
+      tab.setAttribute('aria-pressed', 'true');
 
       const filter = tab.dataset.filter;
       projectRows.forEach((row) => {
