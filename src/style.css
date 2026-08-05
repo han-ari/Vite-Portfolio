@@ -136,6 +136,13 @@ nav.section-nav a{
   letter-spacing:0.005em;
   position:relative;
   overflow-wrap:break-word;
+    display:inline-block;
+  /* Expands the tappable area to meet the 24px touch-target minimum without changing the visible
+     layout: padding grows the box, the matching negative margin pulls surrounding content back to
+     where it would have sat otherwise.
+  */
+  padding:0.3rem 0;
+  margin:-0.3rem 0;
 }
 
 nav.section-nav a::after{
@@ -143,7 +150,7 @@ nav.section-nav a::after{
   position:absolute;
   left:0;
   right:0;
-  bottom:-2px;
+  bottom:calc(-2px - 0.3rem);     /* offset by the same padding added above, so the underline stays under the text, not the padded box */
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -176,6 +183,9 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   color:var(--ink);
   text-decoration:none;
   position:relative;
+  display:inline-block;
+  padding:0.3rem 0;
+  margin:-0.3rem 0;
 }
 
 .social-links a::after{
@@ -183,7 +193,7 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   position:absolute;
   left:0;
   right:0;
-  bottom:-2px;
+  bottom:calc(-2px - 0.3rem);
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -352,7 +362,8 @@ section p{
   font-family:var(--font-body);
   background:none;
   border:none;
-  padding:0;
+  padding:0.3rem 0;
+  margin:-0.3rem 0;
   cursor:pointer;
   font-size:0.78rem;
   font-weight:600;
@@ -366,7 +377,7 @@ section p{
   position:absolute;
   left:0;
   right:0;
-  bottom:-3px;
+  bottom:calc(-3px - 0.3rem);
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -570,6 +581,7 @@ section p{
 .view-all-link{
   display:inline-block;
   margin-top:1.6rem;
+  padding:0.3rem 0;
   font-size:0.85rem;
   font-weight:600;
   color:var(--ink);
@@ -582,7 +594,7 @@ section p{
   position:absolute;
   left:0;
   right:0;
-  bottom:-2px;
+  bottom:calc(-2px - 0.3rem);
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
