@@ -33,8 +33,18 @@ async function initRepos(){
       repoList.innerHTML = ownRepos.map(repoCard).join('');
     }
   } catch(err){
-    repoList.innerHTML = '<p class="form-note">Couldn\'t load repositories right now. Please try again later.</p>';
+    repoList.innerHTML = `
+      <div class="repo-error">
+        <p class="form-note">Couldn't load repositories right now. Please try again.</p>
+        <button type="button" class="retry-btn" id="repo-retry-btn">Retry</button>
+      </div>
+    `;    
     console.error(err);
+
+    const retryBtn = document.getElementById('repo-retry-btn');
+    if(retryBtn){
+      retryBtn.addEventListener('click', () => initRepos());
+    }
   } finally {
     if(repoStatus) repoStatus.classList.remove('is-loading');
   }
@@ -43,7 +53,7 @@ async function initRepos(){
 document.addEventListener('DOMContentLoaded', () => {
   /*
   Order matters for these three: initNavAlign sets the viewport's padding-top, initPageNav then jumps
-  to any deep-linked section against that settled  layout, and initScrollSpy starts observing last so
+  to any deep-linked section against that settled layout, and initScrollSpy starts observing last so
   its first reading is of the final scroll position instead of a stale one.
   */
   initNavAlign();

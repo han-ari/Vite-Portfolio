@@ -9,14 +9,10 @@
 <link rel="alternate icon" href="/favicon.ico"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<!-- Loaded as a non-blocking preload instead of a plain <link rel="stylesheet"> - a synchronous font
-     stylesheet request was flagged by Lighthouse as blocking initial paint. This preloads the CSS in
-     parallel with everything else, then swaps it to an active stylesheet once it arrives; the
-     <noscript> fallback covers browsers with JS disabled. Text still renders immediately in a fallback
-     font either way, since the Google Fonts URL already includes &display=swap. -->
+<!-- Preloads CSS in parallel with everything else, then swaps it to an active stylesheet once it arrives; the
+     <noscript> fallback covers browsers with JS disabled. -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/></noscript>
-<!-- No <link rel="stylesheet"> here — src/style.css is imported from src/main.js instead. Vite treats CSS as a module too. -->
 </head>
 <body>
 
@@ -62,12 +58,17 @@
         <div class="filter-tabs" aria-label="Filter projects by category">
           <button type="button" class="filter-tab is-active" data-filter="all" aria-pressed="true">All</button>
           <button type="button" class="filter-tab" data-filter="web" aria-pressed="false">Web</button>
-          <button type="button" class="filter-tab" data-filter="mobile" aria-pressed="false">Mobile</button>
           <button type="button" class="filter-tab" data-filter="design" aria-pressed="false">Design</button>
-          <button type="button" class="filter-tab" data-filter="experiments" aria-pressed="false">Experiments</button>
+          <button type="button" class="filter-tab" data-filter="data" aria-pressed="false">Data Science, AI &amp; ML</button>
         </div>
       </div>
+      <div class="project-search-row">
+        <label for="project-search" class="visually-hidden">Search projects</label>
+        <input type="text" id="project-search" class="project-search" placeholder="Search projects…" autocomplete="off"/>
+        <p class="project-results-count" id="project-results-count" aria-live="polite"></p>
+      </div>
       <div class="project-list">
+        <p class="project-empty-state" id="project-empty-state" hidden>No projects match your search.</p>
         <a href="#" class="project-row" data-category="web">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><circle cx="120" cy="24" r="40" fill="#ff966b" opacity="0.7"/></svg>
@@ -77,7 +78,7 @@
             <span class="item-meta">2026 / Design &amp; Dev</span>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="mobile">
+        <a href="#" class="project-row" data-category="web">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><rect x="30" y="10" width="60" height="80" rx="10" fill="#d0f7fb" opacity="0.75"/></svg>
           </div>
@@ -86,7 +87,7 @@
             <span class="item-meta">2025 / Design &amp; Dev</span>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="experiments">
+        <a href="#" class="project-row" data-category="data">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><path d="M0 70 Q40 20 80 60 T160 40 V100 H0 Z" fill="#83a6ff" opacity="0.75"/></svg>
           </div>
@@ -104,7 +105,7 @@
             <span class="item-meta">2026 / Design</span>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="web">
+        <a href="#" class="project-row" data-category="design">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><rect x="0" y="60" width="160" height="40" fill="#ff966b" opacity="0.65"/><rect x="0" y="0" width="160" height="20" fill="#d0f7fb" opacity="0.7"/></svg>
           </div>
@@ -113,7 +114,7 @@
             <span class="item-meta">2026 / Design &amp; Dev</span>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="experiments">
+        <a href="#" class="project-row" data-category="data">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><circle cx="30" cy="30" r="14" fill="#83a6ff" opacity="0.8"/><circle cx="80" cy="60" r="20" fill="#ff966b" opacity="0.7"/><circle cx="135" cy="25" r="10" fill="#83a6ff" opacity="0.6"/></svg>
           </div>

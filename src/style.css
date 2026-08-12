@@ -10,9 +10,11 @@
   --ink:#000000;
   --ink-soft:rgba(0,0,0,0.64);
   --ink-faint:rgba(0,0,0,0.58);     
-  /* Was 0.36 that computed to ~2.5:1 contrast on white, failing WCAG AA (4.5:1) for every use of this
-     variable, including form labels. 0.58 computes to ~5.3:1. 
-  */
+  /* Faint
+  was 0.36 - that computed to ~2.5:1 contrast on white, failing WCAG 
+  AA (4.5:1) for every use of this variable, including form labels. 0.58 computes to ~5.3:1.
+ */
+
   --surface:rgba(255,255,255,0.5);
   --surface-border:rgba(0,0,0,0.14);
 
@@ -24,9 +26,9 @@
   --font-body:'Inter','Space Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
 
   /* Hero Spacing 
-     Hero spacing values are extracted so the content column can compute exactly where the nav starts so
-     it can align its heading to it. If any of these change, the alignment updates automatically instead
-     of drifting out of sync. 
+     Hero spacing values are extracted so the content column can compute exactly where the nav starts so it
+     can align its heading to it. If any of these change, the alignment updates automatically instead of 
+     drifting out of sync. 
   */
   --hero-pad-top:clamp(1.25rem, 4vw, 3.5rem);
   --hero-pad-left:clamp(1.25rem, 4vw, 3.5rem);
@@ -75,7 +77,7 @@ body{
 }
 
 /* Hero
-   The hero is a real column, not an overlay. It sits to the left, sized to its own content (capped at
+   The hero is a real column, not an overlay. It sits to the left, sized to its own content (capped at 
    520px on wide screens), so page content filles the rest of the row to the right starting from the same
    top edge. This is a genuine two-column layout rather than one column padded down to visually clear the
    other, so there's no vertical-offset. 
@@ -136,13 +138,18 @@ nav.section-nav a{
   letter-spacing:0.005em;
   position:relative;
   overflow-wrap:break-word;
-    display:inline-block;
-  /* Expands the tappable area to meet the 24px touch-target minimum without changing the visible
-     layout: padding grows the box, the matching negative margin pulls surrounding content back to
-     where it would have sat otherwise.
-  */
-  padding:0.3rem 0;
-  margin:-0.3rem 0;
+}
+
+/* 
+Expands the tappable area to meet the 24px touch-target minimum. This is a separate pseudo-element
+from ::after (the underline) on purpose becaues padding on the link itself was moving the underline 
+along with it and needed constant recompensation. A pseudo-element positioned outside the link's own
+box doesn't touch its layout or the underline's position at all. 
+*/
+nav.section-nav a::before{
+  content:"";
+  position:absolute;
+  inset:-0.3rem 0;
 }
 
 nav.section-nav a::after{
@@ -150,7 +157,7 @@ nav.section-nav a::after{
   position:absolute;
   left:0;
   right:0;
-  bottom:calc(-2px - 0.3rem);     /* offset by the same padding added above, so the underline stays under the text, not the padded box */
+  bottom:-2px;
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -183,9 +190,12 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   color:var(--ink);
   text-decoration:none;
   position:relative;
-  display:inline-block;
-  padding:0.3rem 0;
-  margin:-0.3rem 0;
+}
+
+.social-links a::before{
+  content:"";
+  position:absolute;
+  inset:-0.3rem 0;
 }
 
 .social-links a::after{
@@ -193,7 +203,7 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   position:absolute;
   left:0;
   right:0;
-  bottom:calc(-2px - 0.3rem);
+  bottom:-2px;
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -219,14 +229,15 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   flex-direction:column;
   align-items:flex-start;     /* sections start against the hero column instead of the right edge of the frame */
   overflow-y:auto;
-  /* Left/right/bottom Padding 
-     Fixed gutter around content; top alignment now comes from --nav-offset set in site.js), applied per-section
-     below, so whichever section is currently in view lines its heading up with the nav the same way About does. 
+  /* 
+  Left/right/bottom padding is the fixed gutter around content; top alignment now comes from --nav-offset 
+  (set in site.js), applied per-section below, so whichever section is currently in view lines its heading
+  up with the nav the same way About does. 
   */
   padding:0 var(--hero-pad-left) 3vh var(--hero-pad-left);
-  /* Snapping
-     Snapping between sections is handled in site.js instead of via native scroll-snap - see the note in
-     initScrollSpy for why. 
+  /* 
+  Snapping between sections is handled in site.js instead of via native scroll-snap - see the note in 
+  initScrollSpy for why. 
   */
   scrollbar-width:none;     /* Firefox */
   -ms-overflow-style:none;     /* old Edge/IE */
@@ -236,8 +247,8 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   display:none;     /* Chrome, Safari, new Edge */
 }
 
-/* Home Spacer
-   A full, blank section above About - just the animated background, no content so the page opens
+/* Home spacer
+   A full, blank section above About  just the animated background, no content  so the page opens
    empty instead of showing About immediately. Clicking the hero name scrolls back here.
 */
 .home-spacer{
@@ -250,7 +261,7 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
    All the sections are stacked now instead of one being shown at a time, so scrolling moves through them.
 
    flex:0 0 auto is load-bearing. .page-viewport is a column flex container, which makes every section a
-   flex item, and flex items default to flex-shrink:1 so a section taller than the viewport gets squashed
+   flex item, and flex items default to flex-shrink:1 - so a section taller than the viewport gets squashed
    down to fit and its content spills out over the section below it. Locking shrink to 0 keeps every section
    at its natural content height.
 
@@ -362,8 +373,7 @@ section p{
   font-family:var(--font-body);
   background:none;
   border:none;
-  padding:0.3rem 0;
-  margin:-0.3rem 0;
+  padding:0;
   cursor:pointer;
   font-size:0.78rem;
   font-weight:600;
@@ -372,12 +382,18 @@ section p{
   position:relative;
 }
 
+.filter-tab::before{
+  content:"";
+  position:absolute;
+  inset:-0.3rem 0;
+}
+
 .filter-tab::after{
   content:"";
   position:absolute;
   left:0;
   right:0;
-  bottom:calc(-3px - 0.3rem);
+  bottom:-3px;
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -389,10 +405,66 @@ section p{
 .filter-tab.is-active{ color:var(--ink); }
 .filter-tab.is-active::after{ transform:scaleX(1); }
 
+/* Accessible Label
+   An accessible way to keep a label available to screen readers without showing it visually. The
+   search input's placeholder already communicates its purpose sighted users, but placeholder text
+   alone isn't a substitute for a real <label> for assistive tech. 
+*/
+.visually-hidden{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+.project-search-row{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:1rem;
+  margin-top:1.4rem;
+}
+
+.project-search{
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  color:var(--ink);
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--surface-border);
+  padding:0.4rem 0.1rem 0.6rem;
+  outline:none;
+  flex:1 1 auto;
+  max-width:260px;
+  transition:border-color 0.25s ease;
+}
+
+.project-search::placeholder{ color:var(--ink-faint); }
+.project-search:focus{ border-color:var(--blue); }
+
+.project-results-count{
+  font-size:0.72rem;
+  color:var(--ink-faint);
+  white-space:nowrap;
+  margin:0;
+}
+
 .project-list{
   display:flex;
   flex-direction:column;
   margin-top:1.6rem;
+}
+
+.project-empty-state{
+  font-size:0.9rem;
+  color:var(--ink-faint);
+  padding:1.5rem 0;
+  margin:0;
 }
 
 .project-row{
@@ -581,7 +653,6 @@ section p{
 .view-all-link{
   display:inline-block;
   margin-top:1.6rem;
-  padding:0.3rem 0;
   font-size:0.85rem;
   font-weight:600;
   color:var(--ink);
@@ -589,12 +660,18 @@ section p{
   position:relative;
 }
 
+.view-all-link::before{
+  content:"";
+  position:absolute;
+  inset:-0.3rem 0;
+}
+
 .view-all-link::after{
   content:"";
   position:absolute;
   left:0;
   right:0;
-  bottom:calc(-2px - 0.3rem);
+  bottom:-2px;
   height:1px;
   background:var(--ink);
   transform:scaleX(0);
@@ -701,6 +778,42 @@ section p{
   transform:translateX(2px);
 }
 
+.repo-error{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:0.9rem;
+  padding:1.5rem 0;
+}
+
+.retry-btn{
+  font-family:var(--font-body);
+  font-size:0.85rem;
+  font-weight:600;
+  letter-spacing:0.02em;
+  color:var(--ink);
+  background:none;
+  border:none;
+  padding:0 0 0.25rem;
+  cursor:pointer;
+  position:relative;
+}
+
+.retry-btn::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:var(--ink);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+
+.retry-btn:hover::after{ transform:scaleX(1); }
+
 .form-note{
   font-size:0.8rem;
   color:var(--ink-soft);
@@ -710,8 +823,8 @@ section p{
 
 /* Mobile for phones in portrait or landscape
    Initially I tried to do a two column format so it looks the same as the desktop version but there
-   isn't enough room for it on a phone. Instead the frame stacks vertically, a compact header (my name,
-   role, nav, socials) sit fixed at the top with the nav and social links as wrapping horizontal rows. 
+   isn't enough room for it on a phone.  Instead the frame stacks vertically, a compact header (my name,
+   role, nav, socials) sit fixed at the top with the nav and social links as  wrapping horizontal rows. 
    Content gets filled below with the remainining width and height scrolling on its own. 
 */
 
@@ -764,7 +877,7 @@ section p{
   }
 
   /* Content
-     Sits below the header, full width and scrolls on its own so the javascript nav-sync padding is
+     Sits below the header, full width and scrolls on its own so the javascript nav-sync padding is 
      omitted from this layout (see script.js) and a plain fixed padding is used instead. 
   */
 
@@ -816,8 +929,8 @@ section p{
 
 /* Tablet (701px-1024px, portrait)
    Tablets keep the full two-column desktop skeleton in both orientations. Landscape renders it correctly.
-   Portrait needs  a smaller scale instead of conforming to full desktop sizing (hero column up to 520px, 
-   name up to 4.6rem), which was too large relative to a ~768-834px wide screen and is what threw off
+   Portrait needs a smaller scale instead of conforming to full desktop sizing (hero column up to 520px, 
+   name up to 4.6rem), which was too large relative to a ~768-834px wide screen and is what threw off 
    alignment in my testing. 
 */
    

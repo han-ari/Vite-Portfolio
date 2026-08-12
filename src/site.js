@@ -1,11 +1,13 @@
 /*
-This module has everything that isn't Projects or GitHub Repos. Wave animation, hero/nav alignment
-sync, the scroll-driven nav (reveal-on-scroll + which link is underlined + click-to-scroll), and the
-contact form. Each piece is wrapped in its own exported init fuction so that main.js can call them
-individually during DOMContentLoaded.
+This module has everything that isn't Projects or GitHub Repos. Wave animation, hero/nav alignment sync,
+the scroll-driven nav (reveal-on-scroll + which link is underlined + click-to-scroll), and the contact 
+form. Each piece is wrapped in its own exported init fuction so that main.js can call them individually
+during DOMContentLoaded.
 */
 
-// Sets which nav link is underlined. Shared by the scroll spy and the click handler.
+/*
+Sets which nav link is underlined. Shared by the scroll spy and the click handler.
+*/
 function setCurrentLink(navLinks, id) {
   navLinks.forEach((link) => {
     link.classList.toggle('is-current', id !== null && link.getAttribute('href') === '#' + id);
@@ -17,7 +19,7 @@ Only one section is ever fully visible at a time, matching whichever one is curr
 viewport. This drives two things off the same "which section is current" geometry check: which .page
 gets the .is-current class (so CSS can scale+fade it in while every other section fades out), and
 which nav link gets underlined. Because only the current section is ever shown, its --nav-offset
-padding (see style.css) always lines its heading up with the nav — there's no partial overlap with a
+padding (see style.css) always lines its heading up with the nav - there's no partial overlap with a
 neighbouring section to throw that alignment off.
 */
 export function initScrollSpy() {
@@ -66,7 +68,7 @@ export function initScrollSpy() {
   }
 
   /*
-  Which snap target's own range currently contains the scroll position - this is what the wheel
+  Which snap target's own range currently contains the scroll position -this is what the wheel
   handler needs to know whether there's still content below/above worth scrolling through, rather
   than just picking whichever section's top happens to be closest.
   */
@@ -83,16 +85,16 @@ export function initScrollSpy() {
   On desktop/tablet, wheel/trackpad input pages between short sections instead of leaving you able to
   rest halfway between two with neither aligned to the nav. But Technical Summary and Repositories can
   both run taller than one viewport, and jumping straight to the next section on every wheel tick
-  regardless of position meant there was no way to actually scroll through the rest of their content so
+  regardless of position meant there was no way to actually scroll through the rest of their content -
   the first tick out of a tall section skipped straight past everything still below the fold.
 
-  A wheel tick only triggers a page-jump once you've reached the edge of the CURRENT section's own
-  content (scrolled all the way to its bottom before advancing forward, or all the way to its top
-  before going back). Anywhere in between, the wheel event is left alone and scrolls normally, the same
+  So a wheel tick only triggers a page-jump once you've reached the edge of the CURRENT section's own
+  content - scrolled all the way to its bottom before advancing forward, or all the way to its top
+  before going back. Anywhere in between, the wheel event is left alone and scrolls normally, the same
   as it would inside any ordinary scrollable page.
 
   This only touches wheel input, on purpose. Keyboard scrolling (Page Up/Down, arrow keys, Tab) and
-  touch both fall straight through to ordinary, uncaptured scrolling. Nothing here ever prevents the
+  touch both fall straight through to ordinary, uncaptured scrolling - nothing here ever prevents the
   page from being scrolled through by any method, which is the actual accessibility requirement.
   Reduced-motion users get an instant jump instead of an animated one, same as everywhere else in this
   file.
@@ -111,8 +113,8 @@ export function initScrollSpy() {
     const hasRoomBelow = scrollTop + viewportHeight < sectionEnd - 1;
     const hasRoomAbove = scrollTop > sectionStart + 1;
 
-    if (direction === 1 && hasRoomBelow) return;     // still content below in this section — let it scroll normally
-    if (direction === -1 && hasRoomAbove) return;    // still content above in this section — let it scroll normally
+    if (direction === 1 && hasRoomBelow) return;     // still content below in this section - let it scroll normally
+    if (direction === -1 && hasRoomAbove) return;    // still content above in this section - let it scroll normally
 
     e.preventDefault();
     if (wheelLocked) return;
@@ -140,10 +142,10 @@ export function initScrollSpy() {
 }
 
 /*
-Content should start level with the first nav link, not my name, for EVERY section not just the first
-one. Tried a pure CSS formula but formatting because wonky. So instead, I measured the nav's actual 
-rendered position and expose it as a CSS custom property that every section reads as its own top padding,
-so whichever one is currently in view lines its heading up with the nav the same way.
+Content should start level with the first nav link, not my name, for EVERY section - not just the
+first one. Tried a pure CSS formula but formatting because wonky. So instead, I measured the nav's
+actual rendered position and expose it as a CSS custom property that every section reads as its own
+top padding, so whichever one is currently in view lines its heading up with the nav the same way.
 */
 export function initNavAlign() {
   const heroBlock = document.getElementById('hero-block');
@@ -156,9 +158,9 @@ export function initNavAlign() {
     if (!heroBlock || !pageViewport || !navEl) return;
 
     /*
-    On mobile, the header stacks above the content instead of sitting beside it, so there's no horizontal 
-    alignment to worry about - clear the custom property and let the mobile CSS block's own fixed padding
-    take over.
+    On mobile, the header stacks above the content instead of sitting beside it, so there's no
+    horizontal alignment to worry about - clear the custom property and let the mobile CSS block's
+    own fixed padding take over.
     */
     if (mobileStackQuery.matches) {
       pageViewport.style.removeProperty('--nav-offset');
@@ -178,10 +180,11 @@ export function initNavAlign() {
   }
 
   /*
-  Window resize only fires when the viewport itself changes size, but my name can wrap differently at widths
-  that don't cross a media query boundary (ex. tablet portrait), which changes the nav's vertical position without
-  firing a resize event. A ResizeObserver on the hero block itself cathces that reflow directly, so the two columns
-  stay lined up no matter what even if the hero block's height changes.
+  Window resize only fires when the viewport itself changes size, but my name can wrap differently 
+  at widths that don't cross a media query  boundary (ex. tablet portrait), which changes the nav's 
+  vertical position without firing a resize event. A ResizeObserver on the hero block itself catches
+  that reflow directly, so the two columns stay lined up no matter what even if the hero block's 
+  height changes.
   */
   if ('ResizeObserver' in window && heroBlock) {
     const heroResizeObserver = new ResizeObserver(() => syncNavAlign());
@@ -190,10 +193,10 @@ export function initNavAlign() {
 }
 
 /*
-Nav clicks scroll to a section instead of swapping which one is displayed. The frame, canvas, and hero block
-still never moves, only #page-viewport scrolls. Nothing in here touches .is-current any more; the scroll 
-spy owns the underline and the fade, so a section lights up and appears because the scroll landed there,
-not because it was clicked.
+Nav clicks scroll to a section instead of swapping which one is displayed. The frame, canvas, and hero
+block still never move - only #page-viewport scrolls. Nothing in here touches .is-current any more; the
+scroll spy owns the underline and the fade, so a section lights up and appears because the scroll
+landed there, not because it was clicked.
 */
 export function initPageNav() {
   const pageViewport = document.getElementById('page-viewport');
@@ -204,11 +207,12 @@ export function initPageNav() {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /*
-  Scroll to each section's own offsetTop rather than scrollIntoView. Same reasoning as the settle
+  Scroll to each section's own offsetTop rather than scrollIntoView - same reasoning as the settle
   snap in initScrollSpy: offsetTop is exact, since it's relative to #page-viewport (which is the
   nearest positioned ancestor), while scrollIntoView's alignment can land a few px off for sections
-  taller than the viewport. Clicks are a direct request to go somewhere, so unlike the passive settle 
-  snap, these still move even with reduced motion on; they just jump there instantly instead of animating.
+  taller than the viewport. Clicks are a direct request to go somewhere, so unlike the passive
+  settle snap, these still move even with reduced motion on; they just jump there instantly instead
+  of animating.
   */
   function goToSection(target, behavior) {
     pageViewport.scrollTo({ top: target.offsetTop, behavior: prefersReducedMotion ? 'auto' : behavior });
@@ -236,7 +240,7 @@ export function initPageNav() {
 
   /*
   Deep links still have to work. The browser's own jump-to-fragment is unreliable here because the
-  scroller is a nested element and initNavAlign changes its padding after load, so I did it manually with
+  scroller is a nested element and initNavAlign changes its padding after load, so do it manually with
   'auto' so it's already in place rather than visibly scrolling there.
   */
   const deepLink = location.hash.slice(1);
@@ -269,7 +273,12 @@ a fixed dot budget regardless of screen size, so a big screen gets a coarser gra
 proportionally heavier frame cost.
 */
 let CELL = 5;
-const TARGET_DOT_COUNT = 22000;
+const TARGET_DOT_COUNT = 60000;     
+/* 
+was 22000 - that nearly doubled dot spacing on an ordinary 1920x1080 screen (~83k dots -> ~22k), which was 
+much more noticeable than intended. 60k stays close to the original density on typical screens while still 
+capping the truly large displays that caused the original slowdown. 
+*/
 
 function computeCell(width, height){
   const idealCell = Math.sqrt((width * height) / TARGET_DOT_COUNT);
@@ -301,7 +310,7 @@ for (let i = 0; i < LUT_SIZE; i++) {
 
 /*
 Dots get sorted into this many alpha steps so they can be drawn in batches instead of one at a time (see
-render). 64 steps over an alpha range of 0.75 is a step of about 0.012 which is well below what shows up as banding.
+render). 64 steps over an alpha range of 0.75 is a step of about 0.012 - well below what shows up as banding.
 */
 const ALPHA_STEPS = 64;
 const ALPHA_MAX = 0.75;
@@ -373,7 +382,7 @@ export function initCanvasAnimation() {
     /*
     Colour used to be mixed per dot and written into a fresh `rgba(...)` template string - ~78,000 string
     allocations and ~78,000 CSS colour parses every frame, just to redraw a gradient that never changes shape.
-    It's a fixed diagonal blue to coral ramp, so hand it to the canvas once as a real linear gradient and let
+    It's a fixed diagonal blue -> coral ramp, so hand it to the canvas once as a real linear gradient and let
     the compositor do it. Alpha is the only part that still varies per dot, and globalAlpha handles that.
     */
     gradient = ctx.createLinearGradient(0, height, width, 0);
@@ -404,7 +413,7 @@ export function initCanvasAnimation() {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
- /*
+  /*
   Back to a real clock instead of scroll position - the wave rolls continuously on its own, same as the
   original version, rather than only moving when you scroll. The render math below is unchanged from the
   scroll-driven version though: lookup tables instead of live Math.sin/Math.pow calls, and one batched
@@ -473,7 +482,7 @@ export function initCanvasAnimation() {
 
       /*
       rect, not arc. These dots run from 0.15px to about 2px across, a size where a square and a circle are
-      indistinguishable — but arc() has to tessellate a curve into line segments for every single one, while
+      indistinguishable - but arc() has to tessellate a curve into line segments for every single one, while
       rect() is four points.
       */
       const d = radius * 2;
@@ -491,9 +500,9 @@ export function initCanvasAnimation() {
   /*
   Starting the animation only once the browser reports idle time (or the page has fully loaded, as a
   fallback for browsers without requestIdleCallback) keeps it out of the way of everything competing
-  for the main thread during initial page load which is exactly the window Lighthouse's Total Blocking
-  Time metric measures. The animation itself is unchanged once it starts; this only delays when the 
-  first frame fires.
+  for the main thread during initial page load — which is exactly the window Lighthouse's Total
+  Blocking Time metric measures. The animation itself is unchanged once it starts; this only delays
+  when the first frame fires.
   */
   function start() {
     requestAnimationFrame(draw);
