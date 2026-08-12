@@ -273,13 +273,13 @@ a fixed dot budget regardless of screen size, so a big screen gets a coarser gra
 proportionally heavier frame cost.
 */
 let CELL = 5;
-const TARGET_DOT_COUNT = 60000;     
+const TARGET_DOT_COUNT = 55000;     
 /* 
-was 22000 - that nearly doubled dot spacing on an ordinary 1920x1080 screen (~83k dots -> ~22k), which was 
-much more noticeable than intended. 60k stays close to the original density on typical screens while still 
-capping the truly large displays that caused the original slowdown. 
+Was 38000, tuned for a 30fps (50%-cost) frame cap. The switch to a true 24fps cap (40%-cost) below freed
+up more budget than that left banked as safety margin, so this uses it to push density back up instead - targeting
+roughly the same total render cost as the 22000-dots/60fps configuration that measured at Desktop Performance 78
+earlier, just spent on more dots at a lower frame rate instead. 
 */
-
 function computeCell(width, height){
   const idealCell = Math.sqrt((width * height) / TARGET_DOT_COUNT);
   return Math.max(5, idealCell);     // never finer than the original 5px grain, only ever coarser
@@ -421,9 +421,18 @@ export function initCanvasAnimation() {
   just decides what drives `t`, not how expensive each frame is.
   */
   let startTime = performance.now();
+  /*
+  Capped at 24fps rather than whatever the display refresh rate is. Leaves more of the performance budget
+  free for the dot count above to stay dense.
+  */
+  const TARGET_FPS = 24;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS;
+  let lastRenderTime = 0;
 
   function draw(now) {
     requestAnimationFrame(draw);
+    if (now - lastRenderTime < FRAME_INTERVAL) return;
+    lastRenderTime = now;
     const t = prefersReducedMotion ? 0 : (now - startTime) / 1000;
     render(t);
   }
