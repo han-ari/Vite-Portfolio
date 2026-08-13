@@ -68,7 +68,7 @@ export function initScrollSpy() {
   }
 
   /*
-  Which snap target's own range currently contains the scroll position -this is what the wheel
+  Which snap target's own range currently contains the scroll position - this is what the wheel
   handler needs to know whether there's still content below/above worth scrolling through, rather
   than just picking whichever section's top happens to be closest.
   */
@@ -264,26 +264,16 @@ const COLOR_BLUE = 'rgb(131,166,255)';    // #83a6ff
 const COLOR_CORAL = 'rgb(255,150,107)';   // #ff966b
 
 /*
-px spacing between dot centers, so fine grain. This is the main cost dial for the whole animation: the dot
-count is (width/CELL) * (height/CELL), so cost scales with 1/CELL². A fixed CELL=5 meant a small mobile
-viewport and a large desktop one ended up with wildly different dot counts - a Lighthouse run showed
-~16.7s of blocked main-thread time on a large desktop viewport (tens of thousands more dots than the same
-constant produced on a phone) versus none at all on mobile. CELL is computed per-resize instead, targeting
-a fixed dot budget regardless of screen size, so a big screen gets a coarser grain rather than a
-proportionally heavier frame cost.
+px spacing between dot centers, so fine grain. This was made adaptive for a while to chase a Lighthouse
+Performance score, scaling coarser on large screens to cap the dot count. In testing that trade-off never
+actually paid off the way it was meant to — TBT barely improved even after cutting per-frame cost by ~60%,
+because a perpetually-running animation accumulates Total Blocking Time across Lighthouse's whole
+measurement window, not just from one expensive moment, so there's a density threshold above which more
+tuning knobs stop mattering much. Rather than permanently sacrifice the animation's density for a bonus
+category that isn't required, this reverts to the original fixed spacing and leans on the other bonus
+options instead.
 */
-let CELL = 5;
-const TARGET_DOT_COUNT = 55000;     
-/* 
-Was 38000, tuned for a 30fps (50%-cost) frame cap. The switch to a true 24fps cap (40%-cost) below freed
-up more budget than that left banked as safety margin, so this uses it to push density back up instead - targeting
-roughly the same total render cost as the 22000-dots/60fps configuration that measured at Desktop Performance 78
-earlier, just spent on more dots at a lower frame rate instead. 
-*/
-function computeCell(width, height){
-  const idealCell = Math.sqrt((width * height) / TARGET_DOT_COUNT);
-  return Math.max(5, idealCell);     // never finer than the original 5px grain, only ever coarser
-}
+const CELL = 5;
 
 /*
 Wave shape lookup tables.
@@ -399,7 +389,6 @@ export function initCanvasAnimation() {
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    CELL = computeCell(width, height);
     buildDots();
   }
   window.addEventListener('resize', resize);
@@ -421,18 +410,9 @@ export function initCanvasAnimation() {
   just decides what drives `t`, not how expensive each frame is.
   */
   let startTime = performance.now();
-  /*
-  Capped at 24fps rather than whatever the display refresh rate is. Leaves more of the performance budget
-  free for the dot count above to stay dense.
-  */
-  const TARGET_FPS = 24;
-  const FRAME_INTERVAL = 1000 / TARGET_FPS;
-  let lastRenderTime = 0;
 
   function draw(now) {
     requestAnimationFrame(draw);
-    if (now - lastRenderTime < FRAME_INTERVAL) return;
-    lastRenderTime = now;
     const t = prefersReducedMotion ? 0 : (now - startTime) / 1000;
     render(t);
   }
@@ -559,4 +539,33 @@ export function initContactForm() {
       cfNote.textContent = 'Opening your email client...';
     });
   }
+}
+
+export function initThemeToggle() {
+  const toggle = document.getElementById('theme-toggle');
+  const label = document.getElementById('theme-toggle-label');
+  if (!toggle || !label) return;
+
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
+  }
+
+  function syncButton() {
+    const dark = isDark();
+    toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    label.textContent = dark ? 'Light Mode' : 'Dark Mode';
+  }
+
+  syncButton();
+
+  toggle.addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    if (next === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    localStorage.setItem('theme', next);
+    syncButton();
+  });
 }

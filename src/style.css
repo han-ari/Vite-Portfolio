@@ -7,13 +7,24 @@
   --blue:#83a6ff;
   --coral:#ff966b;
 
+  /* Tech Tag Colours 
+     Taken from my animation gradient using my palette colours. Used one colour per broad skill group
+     (see Technical Summary), not per individual tool so it just needs to be categorized into the 
+     group it belongs to. 
+  */
+
+  --tag-dev:#83a6ff;          /* Development - languages, frameworks, backends/APIs */
+  --tag-data:#a2a2da;         /* Data & Analytics - includes ML */
+  --tag-ai:#c19eb5;           /* AI & GenAI Tools - consumer/generative tools */
+  --tag-design:#ff966b;       /* Design Tools */
+
   --ink:#000000;
   --ink-soft:rgba(0,0,0,0.64);
   --ink-faint:rgba(0,0,0,0.58);     
   /* Faint
-  was 0.36 - that computed to ~2.5:1 contrast on white, failing WCAG 
-  AA (4.5:1) for every use of this variable, including form labels. 0.58 computes to ~5.3:1.
- */
+     was 0.36 - that computed to ~2.5:1 contrast on white, failing WCAG 
+     AA (4.5:1) for every use of this variable, including form labels. 0.58 computes to ~5.3:1.
+  */
 
   --surface:rgba(255,255,255,0.5);
   --surface-border:rgba(0,0,0,0.14);
@@ -38,6 +49,18 @@
   --hero-nav-gap:clamp(1.25rem, 6vh, 2.75rem);
 }
 
+:root[data-theme="dark"]{
+  --ink:#f2f2f2;
+  --ink-soft:rgba(255,255,255,0.75);
+  --ink-faint:rgba(255,255,255,0.62);
+
+  --surface:rgba(20,20,24,0.5);
+  --surface-border:rgba(255,255,255,0.14);
+
+  --frame-border:rgba(255,255,255,0.85);
+  --frame-bg:#0d0d10;
+}
+
 *{ box-sizing:border-box; }
 
 html, body{
@@ -49,7 +72,8 @@ html, body{
 body{
   font-family:var(--font-body);
   color:var(--ink);
-  background:#ffffff;
+  background:var(--frame-bg);
+  transition:background-color 0.3s ease;
 }
 
 /* Frame
@@ -65,6 +89,7 @@ body{
   background:var(--frame-bg);
   display:flex;
   flex-direction:row;
+  transition:background-color 0.3s ease, border-color 0.3s ease;
 }
 
 #wave-canvas{
@@ -213,6 +238,43 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
 
 .social-links a:hover::after{ transform:scaleX(1); }
 
+/* Dark Theme */
+.theme-toggle{
+  display:inline-block;
+  align-self:flex-start;
+  margin-top:1.1rem;
+  font-family:var(--font-body);
+  font-size:0.78rem;
+  font-weight:600;
+  color:var(--ink);
+  background:none;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  position:relative;
+}
+
+.theme-toggle::before{
+  content:"";
+  position:absolute;
+  inset:-0.3rem;
+}
+
+.theme-toggle::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-2px;
+  height:1px;
+  background:var(--ink);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+
+.theme-toggle:hover::after{ transform:scaleX(1); }
+
 /* Page Viewpoint
    All the sections live here stacked one after another, and this is the only element on the page that scrolls
    (html/body are overflow:hidden and .frame is fixed). Navigation clicks scroll to a section rather than
@@ -247,8 +309,8 @@ nav.section-nav a.is-current::after{ transform:scaleX(1); }
   display:none;     /* Chrome, Safari, new Edge */
 }
 
-/* Home spacer
-   A full, blank section above About  just the animated background, no content  so the page opens
+/* Home Spacer
+   A full, blank section above About just the animated background, no content so the page opens
    empty instead of showing About immediately. Clicking the hero name scrolls back here.
 */
 .home-spacer{
@@ -518,6 +580,42 @@ section p{
   gap:0.3rem;
   width:100%;
 }
+
+.project-desc{
+  font-size:0.85rem;
+  line-height:1.65;
+  color:var(--ink-soft);
+  max-width:52ch;
+  margin:0.2rem 0 0;
+}
+
+.project-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.9rem;
+  margin-top:0.3rem;
+}
+
+.tech-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:0.4rem;
+  font-size:0.78rem;
+  color:var(--ink);
+}
+
+.tech-tag::before{
+  content:"";
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.tech-tag--dev::before{ background:var(--tag-dev); }
+.tech-tag--data::before{ background:var(--tag-data); }
+.tech-tag--ai::before{ background:var(--tag-ai); }
+.tech-tag--design::before{ background:var(--tag-design); }
 
 .project-thumb{
   position:absolute;
@@ -823,8 +921,8 @@ section p{
 
 /* Mobile for phones in portrait or landscape
    Initially I tried to do a two column format so it looks the same as the desktop version but there
-   isn't enough room for it on a phone.  Instead the frame stacks vertically, a compact header (my name,
-   role, nav, socials) sit fixed at the top with the nav and social links as  wrapping horizontal rows. 
+   isn't enough room for it on a phone. Instead the frame stacks vertically, a compact header (my name,
+   role, nav, socials) sit fixed at the top with the nav and social links as wrapping horizontal rows. 
    Content gets filled below with the remainining width and height scrolling on its own. 
 */
 

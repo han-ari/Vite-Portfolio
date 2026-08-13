@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if(theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Ari Han</title>
 <meta name="description" content="Ari Han — developer, designer, and data science/AI-ML enthusiast. Personal portfolio built with vanilla HTML, CSS, and JavaScript."/>
@@ -41,6 +48,10 @@
       <a href="https://linkedin.com/in/ari-han" target="_blank" rel="noopener">LinkedIn ↗</a>
       <a href="https://x.com/hanaridev" target="_blank" rel="noopener">X / Twitter ↗</a>
     </div>
+
+    <button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false">
+      <span id="theme-toggle-label">Dark Mode</span>
+    </button>
   </div>
 
   <main class="page-viewport" id="page-viewport">
@@ -69,31 +80,45 @@
       </div>
       <div class="project-list">
         <p class="project-empty-state" id="project-empty-state" hidden>No projects match your search.</p>
-        <a href="#" class="project-row" data-category="web">
+        <a href="https://github.com/han-ari/Culinary-Arts-Quiz" class="project-row" data-category="web" target="_blank" rel="noopener noreferrer">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><circle cx="120" cy="24" r="40" fill="#ff966b" opacity="0.7"/></svg>
           </div>
           <div class="project-info">
-            <span class="item-title">Project One</span>
-            <span class="item-meta">2026 / Design &amp; Dev</span>
+            <span class="item-title">Culinary Arts Quiz</span>
+            <span class="item-meta">2026 / Web</span>
+            <p class="project-desc">An interactive quiz application that showcases my progress in mastering front-end development, specifically focusing on complex JavaScript logic and DOM manipulation.</p>
+            <div class="project-tags">
+              <span class="tech-tag tech-tag--dev">JavaScript</span>
+            </div>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="web">
+        <a href="/hotel-analytics-report.pdf" class="project-row" data-category="data" target="_blank" rel="noopener noreferrer">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#ff966b"/><rect x="30" y="10" width="60" height="80" rx="10" fill="#d0f7fb" opacity="0.75"/></svg>
           </div>
           <div class="project-info">
-            <span class="item-title">Project Two</span>
-            <span class="item-meta">2025 / Design &amp; Dev</span>
+            <span class="item-title">Hotel Analytics</span>
+            <span class="item-meta">2026 / Data Science, AI &amp; ML</span>
+            <p class="project-desc">Built a SQL database from provided hotel booking data, developed an API to serve it, and created a Power BI dashboard surfacing occupancy, cancellation, and revenue trends.</p>
+            <div class="project-tags">
+              <span class="tech-tag tech-tag--dev">SQL</span>
+              <span class="tech-tag tech-tag--dev">FastAPI</span>
+              <span class="tech-tag tech-tag--data">Power BI</span>
+            </div>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="data">
+        <a href="https://www.figma.com/design/BON8vxuZyERPc0vosGrW7Z/Portfolio-Service-Mockup?node-id=0-1&t=hsPAn5305rJvHZA7-1" class="project-row" data-category="design" target="_blank" rel="noopener noreferrer">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#d0f7fb"/><path d="M0 70 Q40 20 80 60 T160 40 V100 H0 Z" fill="#83a6ff" opacity="0.75"/></svg>
           </div>
           <div class="project-info">
-            <span class="item-title">Project Three</span>
-            <span class="item-meta">2025 / Dev</span>
+            <span class="item-title">AI Website Design Launch</span>
+            <span class="item-meta">2026 / Design</span>
+            <p class="project-desc">A website design concept for an AI product launch, built in Figma with a focus on clean layout, intuitive navigation, and a modern visual identity.</p>
+            <div class="project-tags">
+              <span class="tech-tag tech-tag--design">Figma</span>
+            </div>
           </div>
         </a>
         <a href="#" class="project-row" data-category="design">
@@ -105,13 +130,13 @@
             <span class="item-meta">2026 / Design</span>
           </div>
         </a>
-        <a href="#" class="project-row" data-category="design">
+        <a href="#" class="project-row" data-category="web">
           <div class="project-thumb" aria-hidden="true">
             <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice"><rect width="160" height="100" fill="#83a6ff"/><rect x="0" y="60" width="160" height="40" fill="#ff966b" opacity="0.65"/><rect x="0" y="0" width="160" height="20" fill="#d0f7fb" opacity="0.7"/></svg>
           </div>
           <div class="project-info">
             <span class="item-title">Project Five</span>
-            <span class="item-meta">2026 / Design &amp; Dev</span>
+            <span class="item-meta">2026 / Web</span>
           </div>
         </a>
         <a href="#" class="project-row" data-category="data">
@@ -120,7 +145,7 @@
           </div>
           <div class="project-info">
             <span class="item-title">Project Six</span>
-            <span class="item-meta">2026 / Dev</span>
+            <span class="item-meta">2026 / Data Science, AI &amp; ML</span>
           </div>
         </a>
       </div>

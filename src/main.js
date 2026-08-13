@@ -8,7 +8,7 @@ import './style.css';
 
 import { initProjectFilters } from './projects.js';
 import { fetchRepos, repoCard } from './api.js';
-import { initNavAlign, initPageNav, initScrollSpy, initCanvasAnimation, initContactForm } from './site.js';
+import { initNavAlign, initPageNav, initScrollSpy, initCanvasAnimation, initContactForm, initThemeToggle } from './site.js';
 
 const USERNAME = 'han-ari';
 
@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollSpy();
   initCanvasAnimation();
   initContactForm();
+  initThemeToggle();
   initProjectFilters();
   initRepos();
 });
